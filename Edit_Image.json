@@ -1,6 +1,213 @@
 {
-  "name": "Edit Image",
+  "name": "EditImage",
   "nodes": [
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1xw59wMZbBZZLYFq3MOsUIUE1Y_9P2D1u-tUGFn-V4PQ",
+          "mode": "list",
+          "cachedResultName": "EDIT IMAGE SHEET",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xw59wMZbBZZLYFq3MOsUIUE1Y_9P2D1u-tUGFn-V4PQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xw59wMZbBZZLYFq3MOsUIUE1Y_9P2D1u-tUGFn-V4PQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "File ID": "ERROR",
+            "File Name": "ERROR"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "File ID",
+              "displayName": "File ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Size (Bytes)",
+              "displayName": "Size (Bytes)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Owner Email",
+              "displayName": "Owner Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Owner Display Name",
+              "displayName": "Owner Display Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Is Shared",
+              "displayName": "Is Shared",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Viewers Can Copy?",
+              "displayName": "Viewers Can Copy?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Image Resolution",
+              "displayName": "Image Resolution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -3680,
+        0
+      ],
+      "id": "09f83aed-8315-40bc-94dd-e5c3fe729011",
+      "name": "Log Error to Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "tYhgUcTfGHbchkrO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1403571279",
+        "text": "={{ $json.execution.error.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -3940,
+        0
+      ],
+      "id": "e92d384b-342e-4bb8-a39b-2365734eda28",
+      "name": "Send Error Message",
+      "webhookId": "6d04f2df-692b-431a-afe6-faea07c13f23",
+      "credentials": {
+        "telegramApi": {
+          "id": "L0NFKsTt2AZ2mmEZ",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -4220,
+        0
+      ],
+      "id": "2cfe4732-9e1e-4ec0-8c9e-eaaa35a638af",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.pictureID }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -4260,
+        -400
+      ],
+      "id": "fc177bf6-ecd8-46b6-870f-7a3f29bea2e6",
+      "name": "DownloadImage1",
+      "retryOnFail": false,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zopFZ1rguU2iVBqF",
+          "name": "EditImage"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('When Executed by Another Workflow').item.json.chatID }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -2920,
+        -600
+      ],
+      "id": "949b9d8c-1207-45f8-bc1e-789a50fa73f2",
+      "name": "Send Photo2",
+      "webhookId": "85dc0064-e5c5-45a9-91a5-60e5b2bc4f1e",
+      "credentials": {
+        "telegramApi": {
+          "id": "L0NFKsTt2AZ2mmEZ",
+          "name": "Telegram account"
+        }
+      }
+    },
     {
       "parameters": {
         "workflowInputs": {
@@ -12,10 +219,14 @@
               "name": "request"
             },
             {
-              "name": "chatID"
+              "name": "chatID",
+              "type": "number"
             },
             {
               "name": "pictureID"
+            },
+            {
+              "name": "NewImageName"
             }
           ]
         }
@@ -23,18 +234,64 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -460,
-        -60
+        -4660,
+        -400
       ],
-      "id": "36d1e3ee-578f-49b2-9412-2efdb2a8679b",
+      "id": "4d542f8c-a64e-46cf-945e-7ec54702fd72",
       "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "## TRIGGER\n",
+        "height": 220,
+        "width": 280,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -4740,
+        -460
+      ],
+      "id": "98b4d341-3bcc-40be-8b46-f2b69a4bcc03",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## DOWNLOADING FILE\n",
+        "height": 220,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -4360,
+        -460
+      ],
+      "id": "8775bf21-d617-4d53-a51d-6ea29467ac98",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## EDIT IMAGE",
+        "height": 220,
+        "width": 280
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3920,
+        -460
+      ],
+      "id": "c64b97c6-2a0d-45c6-b0e0-99c78d2ac898",
+      "name": "Sticky Note3"
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/images/edits",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
@@ -63,17 +320,35 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        60,
-        -60
+        -3840,
+        -400
       ],
-      "id": "24f80819-532a-48de-880e-04c7542acfdb",
+      "id": "e13f6b91-f4e6-4826-8afa-84bad90e9c34",
       "name": "Edit Image",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "rVfjVnsA1cCG0WXk",
-          "name": "OpenAI"
+        "openAiApi": {
+          "id": "nCVtFPSWDwEH45N7",
+          "name": "OpenAi account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## GEENRATE NEW IMAGE\n",
+        "height": 220,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3560,
+        -460
+      ],
+      "id": "30b0cb8c-26a6-4135-a270-349c2cf60efc",
+      "name": "Sticky Note5"
     },
     {
       "parameters": {
@@ -84,43 +359,93 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        280,
-        -60
+        -3440,
+        -400
       ],
-      "id": "50f5c317-bf8e-4532-b350-4789f2ba5015",
+      "id": "1f99df56-8c9b-4e05-a491-a9a0cc02ec80",
       "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "content": "## SHARE ON TELEGRAM\n",
+        "height": 220,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3000,
+        -660
+      ],
+      "id": "aca08ed8-8a50-4340-ab03-22a53e1d7e4c",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## UPLOAD ON DRIVE",
+        "height": 220,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3000,
+        -320
+      ],
+      "id": "20f859ce-7afa-4fb2-b3bd-914c7e00e6de",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## LOG ON SHEETS",
+        "height": 220,
+        "width": 280
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2700,
+        -320
+      ],
+      "id": "42b46101-10d7-428e-83f4-92d1a4f8bf3d",
+      "name": "Sticky Note10"
     },
     {
       "parameters": {
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1JqOTd49heNBdmrf5hSwxI66X724tspAmSjzWoA6-EU0",
+          "value": "1xw59wMZbBZZLYFq3MOsUIUE1Y_9P2D1u-tUGFn-V4PQ",
           "mode": "list",
-          "cachedResultName": "Marketing Team Log",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JqOTd49heNBdmrf5hSwxI66X724tspAmSjzWoA6-EU0/edit?usp=drivesdk"
+          "cachedResultName": "EDIT IMAGE SHEET",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xw59wMZbBZZLYFq3MOsUIUE1Y_9P2D1u-tUGFn-V4PQ/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JqOTd49heNBdmrf5hSwxI66X724tspAmSjzWoA6-EU0/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xw59wMZbBZZLYFq3MOsUIUE1Y_9P2D1u-tUGFn-V4PQ/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Request": "={{ $('When Executed by Another Workflow').item.json.request }}",
-            "ID": "={{ $json.id }}",
-            "Link": "={{ $json.webViewLink }}",
-            "Title": "={{ $('When Executed by Another Workflow').item.json.image }}",
-            "Type": "Edit"
+            "File ID": "={{ $json.id }}",
+            "File Name": "={{ $json.name }}",
+            "Owner Email": "={{ $json.permissions[0].emailAddress }}",
+            "Size (Bytes)": "={{ $json.size }}",
+            "Owner Display Name": "={{ $json.permissions[0].displayName }}",
+            "Is Shared": "={{ $json.capabilities.canShare }}",
+            "Viewers Can Copy?": "={{ $json.viewersCanCopyContent }}",
+            "Image Resolution": "={{ $json.imageMediaMetadata }}"
           },
-          "matchingColumns": [],
+          "matchingColumns": [
+            "id"
+          ],
           "schema": [
             {
-              "id": "Title",
-              "displayName": "Title",
+              "id": "File ID",
+              "displayName": "File ID",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -129,8 +454,8 @@
               "removed": false
             },
             {
-              "id": "Type",
-              "displayName": "Type",
+              "id": "File Name",
+              "displayName": "File Name",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -139,35 +464,58 @@
               "removed": false
             },
             {
-              "id": "Request",
-              "displayName": "Request",
+              "id": "Size (Bytes)",
+              "displayName": "Size (Bytes)",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
-              "id": "ID",
-              "displayName": "ID",
+              "id": "Owner Email",
+              "displayName": "Owner Email",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
-              "id": "Link",
-              "displayName": "Link",
+              "id": "Owner Display Name",
+              "displayName": "Owner Display Name",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
-              "id": "Post",
-              "displayName": "Post",
+              "id": "Is Shared",
+              "displayName": "Is Shared",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Viewers Can Copy?",
+              "displayName": "Viewers Can Copy?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Image Resolution",
+              "displayName": "Image Resolution",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -184,21 +532,21 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        820,
-        80
+        -2620,
+        -260
       ],
-      "id": "ec2809d7-1694-44e0-a71a-1211e4bd035d",
+      "id": "927a5966-fbb2-469c-94bc-5b3f1c9a7d26",
       "name": "Image Log",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "s7PIUa59FFmDLn1e",
-          "name": "Demo 4/2"
+          "id": "tYhgUcTfGHbchkrO",
+          "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "name": "={{ $('When Executed by Another Workflow').item.json.image }} (Edited).png",
+        "name": "={{ $('When Executed by Another Workflow').item.json.NewImageName }}",
         "driveId": {
           "__rl": true,
           "mode": "list",
@@ -206,165 +554,96 @@
         },
         "folderId": {
           "__rl": true,
-          "value": "1TgQu-5hlOzO1X28TMMzLxfhunhPSUIqy",
+          "value": "root",
           "mode": "list",
-          "cachedResultName": "AI Image Generation",
-          "cachedResultUrl": "https://drive.google.com/drive/folders/1TgQu-5hlOzO1X28TMMzLxfhunhPSUIqy"
+          "cachedResultName": "/ (Root folder)",
+          "cachedResultUrl": "https://drive.google.com/drive"
         },
         "options": {}
       },
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        580,
-        80
+        -2920,
+        -260
       ],
-      "id": "4a115e36-6499-4f9a-b67d-9f0822aa5828",
+      "id": "79dfd81c-5a9b-4503-ac1a-10c8259cabf0",
       "name": "Upload Image",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "V2ewjiHO0o6xhQ2R",
-          "name": "nateherk88@gmail.com"
+          "id": "zopFZ1rguU2iVBqF",
+          "name": "EditImage"
         }
       }
     },
     {
       "parameters": {
-        "content": "# Edit Image\n",
+        "content": "#                                          ERROR HANDLING ",
         "height": 260,
-        "width": 460,
-        "color": 5
+        "width": 860
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -20,
-        -140
+        -4300,
+        -80
       ],
-      "id": "5d2f7558-d92f-4210-afad-3e8663ce1c02",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "content": "# Send Content",
-        "height": 240,
-        "width": 300,
-        "color": 6
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        480,
-        -260
-      ],
-      "id": "516cd165-3950-4918-9cbc-1e0270158950",
-      "name": "Sticky Note7"
-    },
-    {
-      "parameters": {
-        "content": "# Write to Drive & Sheets",
-        "height": 240,
-        "width": 540,
-        "color": 6
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        480,
-        0
-      ],
-      "id": "b26da69c-aa27-423d-9300-a91fc06841dd",
-      "name": "Sticky Note6"
-    },
-    {
-      "parameters": {
-        "content": "# Trigger\n",
-        "height": 260,
-        "width": 260,
-        "color": 7
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -540,
-        -140
-      ],
-      "id": "b41c6e09-ff88-4a00-9bed-99d897a21e86",
-      "name": "Sticky Note5",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "content": "# Download\n",
-        "height": 260,
-        "width": 220,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -260,
-        -140
-      ],
-      "id": "d2ed85a5-a54d-41ec-8ba8-bd81ad3757e8",
+      "id": "c3c64cc2-98bd-43dc-8094-6fd5b886e149",
       "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "operation": "sendPhoto",
-        "chatId": "={{ $('When Executed by Another Workflow').item.json.chatID }}",
-        "binaryData": true,
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        580,
-        -180
-      ],
-      "id": "34514a64-8924-41ba-9056-842ed5e53041",
-      "name": "Send Photo",
-      "webhookId": "85dc0064-e5c5-45a9-91a5-60e5b2bc4f1e",
-      "credentials": {
-        "telegramApi": {
-          "id": "9jQWan3cOz3tE62s",
-          "name": "Telegram account 2"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "download",
-        "fileId": {
-          "__rl": true,
-          "value": "={{ $json.pictureID }}",
-          "mode": "id"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        -200,
-        -60
-      ],
-      "id": "f8f7c05b-2b9b-43da-9f77-ec1747ce7fdf",
-      "name": "Download",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "V2ewjiHO0o6xhQ2R",
-          "name": "nateherk88@gmail.com"
-        }
-      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "image": "MyImage.png",
+          "request": "Change The Color Of The Image",
+          "chatID": 1403571279,
+          "pictureID": "1kd3OuvS2AQWKJPWbSyNHpDEwXn7ED94H",
+          "NewImageName": "myNewImage"
+        }
+      }
+    ]
+  },
   "connections": {
+    "Send Error Message": {
+      "main": [
+        [
+          {
+            "node": "Log Error to Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send Error Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DownloadImage1": {
+      "main": [
+        [
+          {
+            "node": "Edit Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "When Executed by Another Workflow": {
       "main": [
         [
           {
-            "node": "Download",
+            "node": "DownloadImage1",
             "type": "main",
             "index": 0
           }
@@ -386,7 +665,7 @@
       "main": [
         [
           {
-            "node": "Send Photo",
+            "node": "Send Photo2",
             "type": "main",
             "index": 0
           },
@@ -408,28 +687,17 @@
           }
         ]
       ]
-    },
-    "Download": {
-      "main": [
-        [
-          {
-            "node": "Edit Image",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "4779739c-f8eb-4121-bd50-1a6b4e7de753",
+  "versionId": "1618ebc9-9e9c-4ea7-ac0e-7c3eacc005f8",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "95e5a8c2e51c83e33b232ea792bbe3f063c094c33d9806a5565cb31759e1ad39"
+    "instanceId": "087ba087470ae4b97567263c5dadc2f24d1f6a27717504fc17a09d11869434c6"
   },
-  "id": "nMBpMe21l4gDEjOI",
+  "id": "kA8lw1Q5f6RcSnlf",
   "tags": []
 }
